@@ -7,11 +7,11 @@ sudo apt-get update -y
 sudo apt-get install git curl wget sed -y
 
 # install ZSH shell, Oh-My-Zsh and Zsh-autosuggestions
-VAR_SHELL=$(echo $SHELL) 
-if [ "$VAR_SHELL" == "/bin/zsh" ]; then
+VAR_SHELL=$(echo ${SHELL##*/})
+if [ "$VAR_SHELL" == "zsh" ]; then
     echo -e "#####################\n"
     echo "ZSH já instalado e definido como padrao !!"
-    echo -e "#####################\n"
+    echo -e "\n#####################\n"
     
     echo -e "### Iniciando Configuracao e instalação do Oh-My-Zsh ###\n"
     #sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
