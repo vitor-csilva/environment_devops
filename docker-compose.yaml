@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+
+  ubuntu:
+    build:
+      context: .
+    volumes:
+      - ${PWD}:/app
