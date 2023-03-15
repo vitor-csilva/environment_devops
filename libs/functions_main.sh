@@ -31,6 +31,9 @@ function _install_sed () {
 }
 
 function _install_git () {
+    echo -e "#####################\n"
+    echo "Iniciando instalação do GIT "
+    echo -e "\n#####################\n"
     case "$(_get_distro)" in
     ubuntu) sudo apt install git -y ;;
     fedora) sudo yum install git -y ;;
@@ -42,6 +45,7 @@ function _install_docker () {
         echo -e "#####################\n"
         echo "Iniciando instalação do Docker "
         echo -e "\n#####################\n"
+        _install_curl
 	    curl -fsSL https://get.docker.com -o get-docker.sh && \
 	    sudo sh get-docker.sh && \
 	    sudo systemctl enable docker && \
@@ -58,6 +62,7 @@ function _install_Oh_My_Zsh () {
     sed -i 's/exec zsh -l/#exec zsh -l/g' /tmp/install.sh
     y | sh /tmp/install.sh
     _configure_autosuggestions
+    
 }
 
 function _configure_autosuggestions () {
@@ -66,22 +71,52 @@ function _configure_autosuggestions () {
 }
 
 function _install_zsh () {
-    echo -e "#####################\n"
-    echo "Iniciando instalação do ZSH "
-    echo -e "\n#####################\n"
-    sudo apt install zsh -y
-    chsh -s /bin/zsh # Command use for set standard shell
-    #zsh # enter ZSH shell
-    _install_Oh_My_Zsh
+    if [ $ENABLE_ZSH -eq 1 ]; then
+        echo -e "#####################\n"
+        echo "Iniciando instalação do ZSH "
+        echo -e "\n#####################\n"
+        sudo apt install zsh -y
+        chsh -s /bin/zsh # Command use for set standard shell
+        #zsh # enter ZSH shell
+        _install_wget
+        _install_sed
+        _install_git
+        _install_Oh_My_Zsh
+    fi
 }
 
 function _install_vscode () {
-    #sudo apt-get install wget gpg
-    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg &&\
-    sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg &&\
-    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' &&\
-    rm -f packages.microsoft.gpg &&\
-    sudo apt install apt-transport-https &&\
-    sudo apt update &&\
-    sudo apt install code -y
+    if [ $ENABLE_CODE -eq 1 ]; then
+        echo -e "#####################\n"
+        echo "Iniciando instalação do Visual Studio Code"
+        echo -e "\n#####################\n"
+        #sudo apt-get install wget gpg
+        _install_wget
+        _install_gpg
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg &&\
+        sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg &&\
+        sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' &&\
+        rm -f packages.microsoft.gpg &&\
+        sudo apt install apt-transport-https &&\
+        sudo apt update &&\
+        sudo apt install code -y
+    fi
+}
+
+function _help () {
+    echo "
+$ ./devops_tools.sh [parâmetros]
+
+Parâmetros aceitos:
+  --no-zsh      - Não fará a instalação do zsh.
+  --no-vscode   - Não fará a instalação do Virtual Studio Code.
+  --no-docker   - Não fará a instalação do docker.
+  -h | --help   - Menu de ajuda.
+    "
+}
+
+function _error () {
+    echo "O parâmetro $1 não existe."
+    _help
+    exit 1
 }
