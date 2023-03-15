@@ -9,10 +9,17 @@ function _install_curl () {
 	esac
 }
 
-function _install_git () {
+function _install_wget () {
     case "$(_get_distro)" in
-    ubuntu) sudo apt install git -y ;;
-    fedora) sudo yum install git -y ;;
+    ubuntu) sudo apt install wget -y ;;
+    fedora) sudo yum install wget -y ;;
+    esac
+}
+
+function _install_gpg () {
+    case "$(_get_distro)" in
+    ubuntu) sudo apt-get install gpg -y ;;
+    fedora) sudo yum install gnupg -y ;;
     esac
 }
 
@@ -23,11 +30,27 @@ function _install_sed () {
     esac
 }
 
-function _install_wget () {
+function _install_git () {
     case "$(_get_distro)" in
-    ubuntu) sudo apt install wget -y ;;
-    fedora) sudo yum install wget -y ;;
+    ubuntu) sudo apt install git -y ;;
+    fedora) sudo yum install git -y ;;
     esac
+}
+
+function _install_docker () {
+    if [ $ENABLE_DOCKER -eq 1 ]; then
+        echo -e "#####################\n"
+        echo "Iniciando instalação do Docker "
+        echo -e "\n#####################\n"
+	    curl -fsSL https://get.docker.com -o get-docker.sh && \
+	    sudo sh get-docker.sh && \
+	    sudo systemctl enable docker && \
+	    sudo systemctl start docker.socket && \
+	    sudo systemctl start docker.service && \
+	    sudo usermod -a -G docker $USER #&& \
+    fi
+	#echo ">> Execute 'newgrp docker' e inicie o script novamente." && \
+	#exit
 }
 
 function _install_Oh_My_Zsh () {
@@ -50,4 +73,15 @@ function _install_zsh () {
     chsh -s /bin/zsh # Command use for set standard shell
     #zsh # enter ZSH shell
     _install_Oh_My_Zsh
+}
+
+function _install_vscode () {
+    #sudo apt-get install wget gpg
+    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg &&\
+    sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg &&\
+    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' &&\
+    rm -f packages.microsoft.gpg &&\
+    sudo apt install apt-transport-https &&\
+    sudo apt update &&\
+    sudo apt install code -y
 }
