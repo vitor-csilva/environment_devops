@@ -90,8 +90,8 @@ function _install_tilix {
   if [ $ENABLE_TILIX -eq 1 ]; then
     sudo apt install tilix -y
     tilix --version
-    #sudo update-alternatives --config x-terminal-emulator   ## form manual set configure.
-    sudo update-alternatives --set x-terminal-emulator /usr/bin/tilix
+    sudo update-alternatives --config x-terminal-emulator   ## form manual set configure.
+    #sudo update-alternatives --set x-terminal-emulator /usr/bin/tilix
   fi
 }
 
