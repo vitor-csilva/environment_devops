@@ -136,6 +136,7 @@ Parâmetros aceitos:
   --no-zsh      - Não fará a instalação do zsh.
   --no-vscode   - Não fará a instalação do Virtual Studio Code.
   --no-docker   - Não fará a instalação do docker.
+  --no-tilix    - Não fará a instalação do Tilix.
   -h | --help   - Menu de ajuda.
     "
 }
