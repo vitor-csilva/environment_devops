@@ -18,6 +18,7 @@ VAR_SHELL=$(echo ${SHELL##*/})
 ENABLE_ZSH=1
 ENABLE_CODE=1
 ENABLE_DOCKER=1
+ENABLE_TILIX=1
 
 function trapped () {
   echo "Erro na linha $1."
@@ -34,6 +35,7 @@ while [ -n "$1" ]; do
         --no-zsh)       ENABLE_ZSH=0    ;;
         --no-vscode)    ENABLE_CODE=0   ;;
         --no-docker)    ENABLE_DOCKER=0 ;;
+        --no-tilix)     ENABLE_TILIX=0  ;;
         -h|--help)      _help; exit     ;;
         *)              _error "$1"     ;;
     esac
@@ -48,3 +50,4 @@ done
 [ -z "`which zsh`" ] || [ $VAR_SHELL != "zsh" ] &&  _install_zsh
 [ -z "`which code`" ]                           &&  _install_vscode
 [ -z "`which docker`" ]                         &&  _install_docker
+[ -z "`which tilix`" ]                          &&  _install_tilix
