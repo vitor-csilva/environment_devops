@@ -32,4 +32,8 @@ This script simplifies the installation of Zsh and Oh My Zsh on Ubuntu with a si
 
 1. Clone this repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/vitor-csilva/environment_devops.git
+
+2. Execute the following command:
+   ```bash
+   ./install_zsh_ubuntu.sh
