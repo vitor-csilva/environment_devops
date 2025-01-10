@@ -1,21 +1,35 @@
-# What is ZSH ? 
-ZSH is a command interpreter UNIX that can be used as an interactive login shell and as a command interpreter for shell scripting.
-# What is Oh My Zsh?
-Oh My Zsh is an open source, community-driven framework for managing your Zsh configuration. With each keystroke in your command prompt, you'll take advantage of the hundreds of powerful plugins and beautiful themes.
+# Zsh: A Powerful UNIX Shell
 
-If in doubt, look official site: https://ohmyz.sh/
+Zsh is a UNIX command interpreter that serves as both an interactive login shell and a command interpreter for shell scripting. Its flexibility and extensive features make it a popular choice for developers.
 
-# install_zsh_ubuntu.sh
+## Oh My Zsh: The Ultimate Zsh Framework
 
-This script install the zsh and Oh My Zsh in Ubuntu SO with just one command.
+Oh My Zsh is an open-source, community-driven framework for managing Zsh configurations. It enhances your command-line experience with hundreds of plugins and stunning themes. For more details, visit the [official site](https://ohmyz.sh/).
 
-1. Plugins installed: 
-    - git
-    - autosuggestion
+---
 
-2. How to use ?
-    - pull this repository and execute the command: ./install_zsh_ubuntu.sh
+# `install_zsh_ubuntu.sh`
 
+This script simplifies the installation of Zsh and Oh My Zsh on Ubuntu with a single command. It also sets up additional tools and plugins to enhance your development environment.
 
+## Features
 
+### Applications Installed
+- **Zsh**: A powerful UNIX shell.
+- **VS Code**: A popular code editor.
+- **Docker**: For containerization and orchestration.
+- **Tilix**: A feature-rich terminal emulator.
 
+### Oh My Zsh Plugins
+- **git**: Enhances Git functionality in Zsh.
+- **autosuggestion**: Suggests commands based on history.
+- **kubectl**: Simplifies Kubernetes command-line management.
+- **zsh-syntax-highlighting**: Highlights commands for better readability.
+
+---
+
+## How to Use
+
+1. Clone this repository:
+   ```bash
+   git clone <repository-url>
