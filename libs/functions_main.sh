@@ -128,6 +128,40 @@ function _install_vscode () {
   fi
 }
 
+function _install_sublime () {
+  if [ $ENABLE_SUBLIME -eq 1 ]; then
+    wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/sublimehq-archive.gpg > /dev/null
+    echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+    sudo apt-get update
+    sudo apt-get install sublime-text
+  fi
+}
+
+function _install_yq () {
+  if [ $ENABLE_YQ -eq 1 ]; then
+    sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
+      chmod +x /usr/bin/yq
+  fi
+}
+
+function _install_jq () {
+  if [ $ENABLE_JQ -eq 1 ]; then
+    sudo apt-get install jq
+  fi
+}
+
+function _install_ansible () {
+  if [ $ENABLE_ANSIBLE -eq 1 ]; then
+    sudo apt-add-repository ppa:ansible/ansible
+    sudo apt update
+    sudo apt install ansible
+  fi
+}
+
+function _install_flameshot () {
+
+}
+
 function _help () {
     echo "
 $ ./devops_tools.sh [parâmetros]
