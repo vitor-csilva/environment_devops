@@ -133,7 +133,7 @@ function _install_sublime () {
     wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/sublimehq-archive.gpg > /dev/null
     echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
     sudo apt-get update
-    sudo apt-get install sublime-text
+    sudo apt-get install sublime-text -y
   fi
 }
 
@@ -146,7 +146,7 @@ function _install_yq () {
 
 function _install_jq () {
   if [ $ENABLE_JQ -eq 1 ]; then
-    sudo apt-get install jq
+    sudo apt-get install jq -y
   fi
 }
 
@@ -154,24 +154,58 @@ function _install_ansible () {
   if [ $ENABLE_ANSIBLE -eq 1 ]; then
     sudo apt-add-repository ppa:ansible/ansible
     sudo apt update
-    sudo apt install ansible
+    sudo apt install ansible -y
   fi
 }
 
 function _install_flameshot () {
+  if [ "$ENABLE_FLAMESHOT" -eq 1 ]; then
+    sudo apt install flameshot -y
 
+    NAME="flameshot"
+    COMMAND="/bin/sh -c 'flameshot gui > /dev/null &'"
+    SHORTCUT="<Primary>l" # Ctrl+L
+    CUSTOM_PATH="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+    CUSTOM_NAME="custom0"
+
+    # Get existing keybindings
+    EXISTING=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings)
+
+    # Add the new keybinding path
+    if [[ "$EXISTING" != *"$CUSTOM_PATH/$CUSTOM_NAME/"* ]]; then
+      if [[ "$EXISTING" == "@as []" ]]; then
+        UPDATED="['$CUSTOM_PATH/$CUSTOM_NAME/']"
+      else
+        UPDATED=$(echo "$EXISTING" | sed "s/]$/, '$CUSTOM_PATH\/$CUSTOM_NAME\/']/")
+      fi
+      gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "$UPDATED"
+    fi
+
+    # Configure the custom shortcut
+    gsettings set "$CUSTOM_PATH/$CUSTOM_NAME/" name "$NAME"
+    gsettings set "$CUSTOM_PATH/$CUSTOM_NAME/" command "$COMMAND"
+    gsettings set "$CUSTOM_PATH/$CUSTOM_NAME/" binding "$SHORTCUT"
+
+    echo "Shortcut configured: $NAME -> $SHORTCUT"
+  fi
 }
+
 
 function _help () {
     echo "
 $ ./devops_tools.sh [parâmetros]
 
 Parâmetros aceitos:
-  --no-zsh      - Não fará a instalação do zsh.
-  --no-vscode   - Não fará a instalação do Virtual Studio Code.
-  --no-docker   - Não fará a instalação do docker.
-  --no-tilix    - Não fará a instalação do Tilix.
-  -h | --help   - Menu de ajuda.
+  --no-zsh        - Não fará a instalação do zsh.
+  --no-vscode     - Não fará a instalação do Virtual Studio Code.
+  --no-docker     - Não fará a instalação do docker.
+  --no-tilix      - Não fará a instalação do Tilix.
+  --no-sublime    - Não fará a instalação do Sublime.
+  --no-yq         - Não fará a instalação do yq.
+  --no-jq         - Não fará a instalação do jq.
+  --no-ansible    - Não fará a instalação do Ansible.
+  --no-flameshot  - Não fará a instalação do Flameshot.
+  -h | --help     - Menu de ajuda.
     "
 }
 
