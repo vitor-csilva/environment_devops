@@ -113,7 +113,7 @@ function _install_zsh () {
 function _install_vscode () {
   if [ $ENABLE_CODE -eq 1 ]; then
       echo -e "#####################\n"
-      echo "Iniciando instalação do Visual Studio Code"
+      echo "Iniciando instalação do Visual Studio Code..."
       echo -e "\n#####################\n"
       #sudo apt-get install wget gpg
       _install_wget
@@ -130,6 +130,9 @@ function _install_vscode () {
 
 function _install_sublime () {
   if [ $ENABLE_SUBLIME -eq 1 ]; then
+    echo -e "#####################\n"
+    echo "Iniciando instalação do Sublime Text..."
+    echo -e "\n#####################\n"
     wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/sublimehq-archive.gpg > /dev/null
     echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
     sudo apt-get update
@@ -139,19 +142,28 @@ function _install_sublime () {
 
 function _install_yq () {
   if [ $ENABLE_YQ -eq 1 ]; then
+    echo -e "#####################\n"
+    echo "Iniciando instalação do yq..."
+    echo -e "\n#####################\n"
     sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
-      chmod +x /usr/bin/yq
+      sudo chmod +x /usr/bin/yq
   fi
 }
 
 function _install_jq () {
   if [ $ENABLE_JQ -eq 1 ]; then
+    echo -e "#####################\n"
+    echo "Iniciando instalação do jq..."
+    echo -e "\n#####################\n"
     sudo apt-get install jq -y
   fi
 }
 
 function _install_ansible () {
   if [ $ENABLE_ANSIBLE -eq 1 ]; then
+    echo -e "#####################\n"
+    echo "Iniciando instalação do Ansible..."
+    echo -e "\n#####################\n"
     sudo apt-add-repository ppa:ansible/ansible
     sudo apt update
     sudo apt install ansible -y
@@ -160,6 +172,10 @@ function _install_ansible () {
 
 function _install_flameshot () {
   if [ "$ENABLE_FLAMESHOT" -eq 1 ]; then
+    echo -e "#####################\n"
+    echo "Iniciando instalação do Flameshot..."
+    echo -e "\n#####################\n"
+
     sudo apt install flameshot -y
 
     NAME="flameshot"
