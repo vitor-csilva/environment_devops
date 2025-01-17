@@ -178,31 +178,16 @@ function _install_flameshot () {
 
     sudo apt install flameshot -y
 
-    NAME="flameshot"
-    COMMAND="/bin/sh -c 'flameshot gui > /dev/null &'"
-    SHORTCUT="<Primary>l" # Ctrl+L
-    CUSTOM_PATH="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
-    CUSTOM_NAME="custom0"
+    cat <<EOF
+OBS: Later installation will need configuration of the Keyboard Shortcut, following the steps:
 
-    # Get existing keybindings
-    EXISTING=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings)
+  1- Settings -> Keyboard -> Keyboard Shortcuts -> View and Customize Shortcuts -> Custom Shortcuts
+  2- Add new Shortcut with the following command:
+  
+    /bin/sh -c "flameshot gui" > /dev/null &
 
-    # Add the new keybinding path
-    if [[ "$EXISTING" != *"$CUSTOM_PATH/$CUSTOM_NAME/"* ]]; then
-      if [[ "$EXISTING" == "@as []" ]]; then
-        UPDATED="['$CUSTOM_PATH/$CUSTOM_NAME/']"
-      else
-        UPDATED=$(echo "$EXISTING" | sed "s/]$/, '$CUSTOM_PATH\/$CUSTOM_NAME\/']/")
-      fi
-      gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "$UPDATED"
-    fi
-
-    # Configure the custom shortcut
-    gsettings set "$CUSTOM_PATH/$CUSTOM_NAME/" name "$NAME"
-    gsettings set "$CUSTOM_PATH/$CUSTOM_NAME/" command "$COMMAND"
-    gsettings set "$CUSTOM_PATH/$CUSTOM_NAME/" binding "$SHORTCUT"
-
-    echo "Shortcut configured: $NAME -> $SHORTCUT"
+EOF 
+    
   fi
 }
 
