@@ -57,6 +57,7 @@ done
 # [ -z "`which sed`" ]                            &&  _install_sed
 # [ -z "`which gpg`" ]                            &&  _install_gpg
 # [ -z "`which git`" ]                            &&  _install_git
+
 [ -z "`which zsh`" ] || [ $VAR_SHELL != "zsh" ] &&  _install_zsh
 [ -z "`which code`" ]                           &&  _install_vscode
 [ -z "`which docker`" ]                         &&  _install_docker
@@ -66,4 +67,4 @@ done
 [ -z "`which jq`" ]                             &&  _install_jq
 [ -z "`which ansible`" ]                        &&  _install_ansible
 [ -z "`which flameshot`" ]                      &&  _install_flameshot
-_menssage
+_message

@@ -180,29 +180,32 @@ function _install_flameshot () {
   fi
 }
 
-function _menssage () {
-
+function _message () {
     cat <<EOF
-    #####################
-    # After Instalation #
-    #####################
+
+
+#####################
+# After Installation #
+#####################
 
 -> Flameshot:
 
-Later installation will need configuration of the Keyboard Shortcut, following the steps:
+After installation, configure the keyboard shortcut by following these steps:
 
-  1- Settings -> Keyboard -> Keyboard Shortcuts -> View and Customize Shortcuts -> Custom Shortcuts
-  2- Add new Shortcut with the following command:
-  
-    /bin/sh -c "flameshot gui" > /dev/null &
+  1. Go to Settings -> Keyboard -> Keyboard Shortcuts -> View and Customize Shortcuts -> Custom Shortcuts
+  2. Add a new shortcut with the following details:
+     
+     Name: Flameshot
+     Command: /bin/sh -c "flameshot gui > /dev/null &"
+     Shortcut: Choose your preferred shortcut, e.g., Alt+P
 
--> After Execute Script:
+-> Post-Script Execution:
 
-  1- Reboot your system for aplying configuration !! 
+  1. Reboot your system to apply the configurations!
 
-EOF 
-
+EOF
 }
+
 
 
 function _help () {
