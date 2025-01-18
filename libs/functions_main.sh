@@ -177,18 +177,31 @@ function _install_flameshot () {
     echo -e "\n#####################\n"
 
     sudo apt install flameshot -y
+  fi
+}
+
+function _menssage () {
 
     cat <<EOF
-OBS: Later installation will need configuration of the Keyboard Shortcut, following the steps:
+    #####################
+    # After Instalation #
+    #####################
+
+-> Flameshot:
+
+Later installation will need configuration of the Keyboard Shortcut, following the steps:
 
   1- Settings -> Keyboard -> Keyboard Shortcuts -> View and Customize Shortcuts -> Custom Shortcuts
   2- Add new Shortcut with the following command:
   
     /bin/sh -c "flameshot gui" > /dev/null &
 
+-> After Execute Script:
+
+  1- Reboot your system for aplying configuration !! 
+
 EOF 
-    
-  fi
+
 }
 
 

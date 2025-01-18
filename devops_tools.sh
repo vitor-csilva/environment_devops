@@ -66,3 +66,4 @@ done
 [ -z "`which jq`" ]                             &&  _install_jq
 [ -z "`which ansible`" ]                        &&  _install_ansible
 [ -z "`which flameshot`" ]                      &&  _install_flameshot
+_menssage
