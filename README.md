@@ -8,7 +8,7 @@ Oh My Zsh is an open-source, community-driven framework for managing Zsh configu
 
 ---
 
-# `install_zsh_ubuntu.sh`
+# `devops_tools.sh`
 
 This script simplifies the installation of Zsh and Oh My Zsh on Ubuntu with a single command. It also sets up additional tools and plugins to enhance your development environment.
 
