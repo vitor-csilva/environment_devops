@@ -77,6 +77,9 @@ function _configure_theme_zsh () {
 }
 
 function _install_kubectl {
+  echo -e "\n#####################\n"
+  echo "Iniciando instalação do Kubectl..."
+  echo -e "\n#####################\n"
   curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
   chmod +x kubectl
   sudo mv -f kubectl /bin/
