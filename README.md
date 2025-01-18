@@ -15,10 +15,15 @@ This script simplifies the installation of Zsh and Oh My Zsh on Ubuntu with a si
 ## Features
 
 ### Applications Installed
-- **Zsh**: A powerful UNIX shell.
-- **VS Code**: A popular code editor.
-- **Docker**: For containerization and orchestration.
-- **Tilix**: A feature-rich terminal emulator.
+- **Zsh**: A powerful UNIX shell with customizable themes and plugins.
+- **VS Code**: A popular code editor for developers with extensive plugin support.
+- **Docker**: For containerization and orchestration, enabling you to build and run applications in isolated environments.
+- **Ansible**: A tool for IT automation, configuration management, and orchestration.
+- **Tilix**: A feature-rich terminal emulator with support for tiling and session management.
+- **Sublime Text**: A lightweight and fast text editor ideal for coding and editing plain text.
+- **Yq**: A command-line YAML processor for querying and manipulating YAML files.
+- **Jq**: A lightweight and flexible command-line JSON processor.
+- **Flameshot**: A powerful screenshot tool with annotation features for capturing and editing screenshots easily.
 
 ### Oh My Zsh Plugins
 - **git**: Enhances Git functionality in Zsh.
@@ -36,4 +41,4 @@ This script simplifies the installation of Zsh and Oh My Zsh on Ubuntu with a si
 
 2. Execute the following command:
    ```bash
-   ./install_zsh_ubuntu.sh
+   ./devops_tools.sh
