@@ -18,6 +18,7 @@ VAR_SHELL=$(echo ${SHELL##*/})
 ENABLE_ZSH=1
 ENABLE_CODE=1
 ENABLE_DOCKER=1
+ENBALE_KUBECTL=1
 ENABLE_TILIX=1
 ENABLE_SUBLIME=1
 ENABLE_YQ=1
@@ -37,17 +38,18 @@ trap 'trapped $LINENO' ERR
 
 while [ -n "$1" ]; do
     case "$1" in
-        --no-zsh)       ENABLE_ZSH=0    ;;
-        --no-vscode)    ENABLE_CODE=0   ;;
-        --no-docker)    ENABLE_DOCKER=0 ;;
-        --no-tilix)     ENABLE_TILIX=0  ;;
-        --no-sublime)   ENABLE_SUBLIME=0;;
-        --no-yq)        ENABLE_YQ=0     ;;
-        --no-jq)        ENABLE_JQ=0     ;;
-        --no-ansible)   ENABLE_ANSIBLE=0;;
-        --no-flameshot) ENABLE_ANSIBLE=0;;
-        -h|--help)      _help; exit     ;;
-        *)              _error "$1"     ;;
+        --no-zsh)       ENABLE_ZSH=0      ;;
+        --no-vscode)    ENABLE_CODE=0     ;;
+        --no-docker)    ENABLE_DOCKER=0   ;;
+        --no-kubectl)   ENABLE_KUBECTL=0  ;;
+        --no-tilix)     ENABLE_TILIX=0    ;;
+        --no-sublime)   ENABLE_SUBLIME=0  ;;
+        --no-yq)        ENABLE_YQ=0       ;;
+        --no-jq)        ENABLE_JQ=0       ;;
+        --no-ansible)   ENABLE_ANSIBLE=0  ;;
+        --no-flameshot) ENABLE_FLAMESHOT=0;;
+        -h|--help)      _help; exit       ;;
+        *)              _error "$1"       ;;
     esac
     shift
 done 
@@ -61,6 +63,7 @@ done
 [ -z "`which zsh`" ] || [ $VAR_SHELL != "zsh" ] &&  _install_zsh
 [ -z "`which code`" ]                           &&  _install_vscode
 [ -z "`which docker`" ]                         &&  _install_docker
+[ -z "`which kubectl`" ]                        &&  _install_kubectl
 [ -z "`which tilix`" ]                          &&  _install_tilix
 [ -z "`which subl`" ]                           &&  _install_sublime
 [ -z "`which yq`" ]                             &&  _install_yq

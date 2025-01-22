@@ -32,7 +32,7 @@ function _install_sed () {
 
 function _install_git () {
   echo -e "#####################\n"
-  echo "Iniciando instalação do GIT "
+  echo "Iniciando instalação do Git "
   echo -e "\n#####################\n"
   case "$(_get_distro)" in
   ubuntu) sudo apt install git -y ;;
@@ -42,10 +42,10 @@ function _install_git () {
 
 function _install_docker () {
   if [ $ENABLE_DOCKER -eq 1 ]; then
-      echo -e "#####################\n"
-      echo "Iniciando instalação do Docker "
-      echo -e "\n#####################\n"
-      _install_curl
+    echo -e "#####################\n"
+    echo "Iniciando instalação do Docker "
+    echo -e "\n#####################\n"
+    _install_curl
     curl -fsSL https://get.docker.com -o get-docker.sh && \
     sudo sh get-docker.sh && \
     sudo systemctl enable docker && \
@@ -58,6 +58,9 @@ function _install_docker () {
 }
 
 function _install_Oh_My_Zsh () {
+  echo -e "\n#####################\n"
+  echo "Iniciando instalação do Oh My Zsh..."
+  echo -e "\n#####################\n"
   wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -P /tmp
   sed -i 's/exec zsh -l/#exec zsh -l/g' /tmp/install.sh
   y | sh /tmp/install.sh
@@ -77,12 +80,15 @@ function _configure_theme_zsh () {
 }
 
 function _install_kubectl {
-  echo -e "\n#####################\n"
-  echo "Iniciando instalação do Kubectl..."
-  echo -e "\n#####################\n"
-  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-  chmod +x kubectl
-  sudo mv -f kubectl /bin/
+  if [ $ENABLE_KUBECTL -eq 1 ]; then
+    echo -e "\n#####################\n"
+    echo "Iniciando instalação do Kubectl..."
+    echo -e "\n#####################\n"
+    _install_curl
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    chmod +x kubectl
+    sudo mv -f kubectl /bin/
+  fi
 }
 
 function _install_zsh-syntax-highlighting {
@@ -91,6 +97,9 @@ function _install_zsh-syntax-highlighting {
 
 function _install_tilix {
   if [ $ENABLE_TILIX -eq 1 ]; then
+    echo -e "#####################\n"
+    echo "Iniciando instalação do Tilix..."
+    echo -e "\n#####################\n"
     sudo apt install tilix -y
     tilix --version
     sudo update-alternatives --config x-terminal-emulator   ## form manual set configure.
@@ -178,7 +187,6 @@ function _install_flameshot () {
     echo -e "#####################\n"
     echo "Iniciando instalação do Flameshot..."
     echo -e "\n#####################\n"
-
     sudo apt install flameshot -y
   fi
 }
@@ -219,6 +227,7 @@ Parâmetros aceitos:
   --no-zsh        - Não fará a instalação do zsh.
   --no-vscode     - Não fará a instalação do Virtual Studio Code.
   --no-docker     - Não fará a instalação do docker.
+  --no-kubectl    - Não fará a instalação do kubectl.
   --no-tilix      - Não fará a instalação do Tilix.
   --no-sublime    - Não fará a instalação do Sublime.
   --no-yq         - Não fará a instalação do yq.
