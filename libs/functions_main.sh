@@ -65,7 +65,6 @@ function _install_Oh_My_Zsh () {
   sed -i 's/exec zsh -l/#exec zsh -l/g' /tmp/install.sh
   y | sh /tmp/install.sh
   _install_zsh-syntax-highlighting
-  _install_kubectl
   _configure_plugins_zsh
   _configure_theme_zsh
 }
@@ -87,7 +86,8 @@ function _install_kubectl {
     _install_curl
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
     chmod +x kubectl
-    sudo mv -f kubectl /bin/
+    sudo mv -f kubectl /usr/bin/
+    echo "export PATH=$PATH:~/usr/bin/" >> ~/.zshrc
   fi
 }
 
