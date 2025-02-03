@@ -221,6 +221,19 @@ function _install_anydesk () {
   fi
 }
 
+
+function _install_terraform () {
+  if [ "$ENABLE_TERRAFORM" -eq 1 ]; then
+    echo -e "#####################\n"
+    echo "Iniciando instalação do Terraform..."
+    echo -e "\n#####################\n"
+    wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    sudo apt update && sudo apt install terraform
+  fi
+}
+
+
 function _message () {
     cat <<EOF
 
@@ -264,6 +277,8 @@ Parâmetros aceitos:
   --no-jq         - Não fará a instalação do jq.
   --no-ansible    - Não fará a instalação do Ansible.
   --no-flameshot  - Não fará a instalação do Flameshot.
+  --no-anydesk    - Não fará a instalação do Anydesk.
+  --no-terraform  - Não fará a instalação do terraform.
   -h | --help     - Menu de ajuda.
     "
 }

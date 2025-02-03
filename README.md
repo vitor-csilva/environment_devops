@@ -25,6 +25,7 @@ This script simplifies the installation of Zsh and Oh My Zsh on Ubuntu with a si
 - **Jq**: A lightweight and flexible command-line JSON processor.
 - **Flameshot**: A powerful screenshot tool with annotation features for capturing and editing screenshots easily.
 - **Anydesk**: is a fast and secure remote desktop application that allows users to access and control computers from anywhere. It is lightweight, with low latency and high-performance remote access, making it ideal for IT support, remote work, and collaboration.
+- **Terraform**: Terraform is an infrastructure as code tool that lets you build, change, and version infrastructure safely and efficiently. This includes low-level components like compute instances, storage, and networking; and high-level components like DNS entries and SaaS features.
 
 ### Oh My Zsh Plugins
 - **git**: Enhances Git functionality in Zsh.
