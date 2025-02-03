@@ -24,6 +24,7 @@ This script simplifies the installation of Zsh and Oh My Zsh on Ubuntu with a si
 - **Yq**: A command-line YAML processor for querying and manipulating YAML files.
 - **Jq**: A lightweight and flexible command-line JSON processor.
 - **Flameshot**: A powerful screenshot tool with annotation features for capturing and editing screenshots easily.
+- **Anydesk**: is a fast and secure remote desktop application that allows users to access and control computers from anywhere. It is lightweight, with low latency and high-performance remote access, making it ideal for IT support, remote work, and collaboration.
 
 ### Oh My Zsh Plugins
 - **git**: Enhances Git functionality in Zsh.

@@ -191,6 +191,36 @@ function _install_flameshot () {
   fi
 }
 
+function _install_anydesk () {
+  if [ "$ENABLE_ANYDESK" -eq 1 ]; then
+    echo -e "#####################\n"
+    echo "Iniciando instalação do Anydesk..."
+    echo -e "\n#####################\n"
+    sudo apt update
+    sudo apt -y upgrade
+    curl -fsSL https://keys.anydesk.com/repos/DEB-GPG-KEY|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/anydesk.gpg
+    echo "deb http://deb.anydesk.com/ all main" | sudo tee /etc/apt/sources.list.d/anydesk-stable.list
+    sudo apt update
+    sudo apt install anydesk
+    
+    CONFIG_FILE="/etc/gdm3/custom.conf"
+    BACKUP_FILE="/etc/gdm3/custom.conf.bak"
+
+    # Create a backup before modifying
+    sudo cp "$CONFIG_FILE" "$BACKUP_FILE"
+    echo "Backup created at $BACKUP_FILE"
+
+    # Modify the file
+    sudo sed -i \
+        -e 's/#WaylandEnable=false/WaylandEnable=false/' \
+        -e 's/#  AutomaticLoginEnable = true/AutomaticLoginEnable = true/' \
+        -e 's|#  AutomaticLogin =.*|AutomaticLogin = $USERNAME|' \
+        "$CONFIG_FILE"
+
+    echo -e "\nGDM for Anydesk configuration updated successfully!"
+  fi
+}
+
 function _message () {
     cat <<EOF
 

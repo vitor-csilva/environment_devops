@@ -25,6 +25,7 @@ ENABLE_YQ=1
 ENABLE_JQ=1
 ENABLE_ANSIBLE=1
 ENABLE_FLAMESHOT=1
+ENABLE_ANYDESK=1
 
 function trapped () {
   echo "Erro na linha $1."
@@ -48,6 +49,7 @@ while [ -n "$1" ]; do
         --no-jq)        ENABLE_JQ=0       ;;
         --no-ansible)   ENABLE_ANSIBLE=0  ;;
         --no-flameshot) ENABLE_FLAMESHOT=0;;
+        --no-anydesk)   ENABLE_ANYDESK=0  ;;
         -h|--help)      _help; exit       ;;
         *)              _error "$1"       ;;
     esac
@@ -70,4 +72,5 @@ done
 [ -z "`which jq`" ]                             &&  _install_jq
 [ -z "`which ansible`" ]                        &&  _install_ansible
 [ -z "`which flameshot`" ]                      &&  _install_flameshot
+[ -z "`which anydesk`" ]                        &&  _install_anydesk
 _message
