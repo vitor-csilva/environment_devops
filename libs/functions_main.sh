@@ -193,13 +193,21 @@ function _install_flameshot () {
 
 function _install_anydesk () {
   if [ "$ENABLE_ANYDESK" -eq 1 ]; then
+    #http://deb.anydesk.com/howto.html
     echo -e "#####################\n"
     echo "Iniciando instalação do Anydesk..."
     echo -e "\n#####################\n"
+    # Add the AnyDesk GPG key
     sudo apt update
-    sudo apt -y upgrade
-    curl -fsSL https://keys.anydesk.com/repos/DEB-GPG-KEY|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/anydesk.gpg
-    echo "deb http://deb.anydesk.com/ all main" | sudo tee /etc/apt/sources.list.d/anydesk-stable.list
+    sudo apt install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://keys.anydesk.com/repos/DEB-GPG-KEY -o /etc/apt/keyrings/keys.anydesk.com.asc
+    sudo chmod a+r /etc/apt/keyrings/keys.anydesk.com.asc
+
+    # Add the AnyDesk apt repository
+    echo "deb [signed-by=/etc/apt/keyrings/keys.anydesk.com.asc] http://deb.anydesk.com all main" | sudo tee /etc/apt/sources.list.d/anydesk-stable.list > /dev/null
+
+    # Update apt caches and install the AnyDesk client
     sudo apt update
     sudo apt install anydesk
     
