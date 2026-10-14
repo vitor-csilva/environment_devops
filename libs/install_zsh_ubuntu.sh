@@ -1,44 +1,116 @@
 #!/bin/bash
+#
+# install_zsh_ubuntu.sh - Standalone installer for Zsh + Oh My Zsh on Ubuntu.
+#
+# Usage:
+#   ./libs/install_zsh_ubuntu.sh
+#
+set -euo pipefail
 
-# att repositories
-sudo apt-get update -y
+OMZ_INSTALL_URL="https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+AUTOSUGGESTIONS_REPO="https://github.com/zsh-users/zsh-autosuggestions"
+SYNTAX_HIGHLIGHTING_REPO="https://github.com/zsh-users/zsh-syntax-highlighting.git"
+ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+PLUGINS="git zsh-autosuggestions kubectl zsh-syntax-highlighting"
+THEME="xiong-chiamiov-plus"
 
-# install necessary packages/apps
-sudo apt-get install git curl wget sed -y
+function _print_header () {
+  echo -e "\n#####################"
+  echo "$1"
+  echo -e "#####################\n"
+}
 
-# install ZSH shell, Oh-My-Zsh and Zsh-autosuggestions
-VAR_SHELL=$(echo ${SHELL##*/})
-if [ "$VAR_SHELL" == "zsh" ]; then
-    echo -e "#####################\n"
-    echo "ZSH já instalado e definido como padrao !!"
-    echo -e "\n#####################\n"
-    
-    echo -e "### Iniciando Configuracao e instalação do Oh-My-Zsh ###\n"
-    #sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -P /tmp
-    sed -i 's/exec zsh -l/#exec zsh -l/g' /tmp/install.sh
-    sh /tmp/install.sh
+function _install_prerequisites () {
+  _print_header "Updating apt and installing prerequisites"
+  sudo apt-get update -y
+  sudo apt-get install -y git curl wget sed zsh
+}
 
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions)/g' ~/.zshrc
-    echo -e "\n###########################################\n"
-    echo "Instalação concluída, REINICIAR A MÁQUINA"
-    echo -e "#########################################\n"
-else
-    echo -e "\n### Instalacao Zsh shell em andamento... ###\n"
-    zsh --version || sudo apt install zsh -y
-    chsh -s /bin/zsh # Command use for set standard shell
-    #zsh # enter ZSH shell
+function _set_default_shell () {
+  local current_shell="${SHELL##*/}"
+  if [ "$current_shell" = "zsh" ]; then
+    echo "Zsh is already the default shell."
+    return 0
+  fi
 
-    echo -e "\n### Iniciando Configuracao e instalação do Oh-My-Zsh ###\n"
-    #sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -y
-    wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -P /tmp
-    sed -i 's/exec zsh -l/#exec zsh -l/g' /tmp/install.sh
-    sh /tmp/install.sh -y
+  _print_header "Setting Zsh as the default shell"
+  if command -v zsh >/dev/null 2>&1; then
+    chsh -s "$(command -v zsh)"
+  else
+    chsh -s /bin/zsh
+  fi
+}
 
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions)/g' ~/.zshrc
-    echo -e "\n###########################################\n"
-    echo "Instalação concluída, REINICIAR A MÁQUINA"
-    echo -e "\n#########################################\n"
-fi
+function _install_oh_my_zsh () {
+  if [ -d "$HOME/.oh-my-zsh" ]; then
+    echo "Oh My Zsh is already installed. Skipping."
+    return 0
+  fi
+
+  _print_header "Installing Oh My Zsh"
+  # Official unattended flags avoid interactive prompts and exec zsh
+  RUNZSH=no CHSH=no sh -c "$(curl -fsSL "$OMZ_INSTALL_URL")" "" --unattended
+}
+
+function _clone_plugin () {
+  local name="$1"
+  local repo="$2"
+  local target="${ZSH_CUSTOM_DIR}/plugins/${name}"
+
+  if [ -d "$target" ]; then
+    echo "Plugin '${name}' already present. Skipping clone."
+    return 0
+  fi
+
+  git clone "$repo" "$target"
+}
+
+function _configure_plugins () {
+  _print_header "Configuring Oh My Zsh plugins"
+  mkdir -p "${ZSH_CUSTOM_DIR}/plugins"
+
+  _clone_plugin "zsh-autosuggestions" "$AUTOSUGGESTIONS_REPO"
+  _clone_plugin "zsh-syntax-highlighting" "$SYNTAX_HIGHLIGHTING_REPO"
+
+  if [ -f "$HOME/.zshrc" ]; then
+    if grep -qE '^plugins=\(' "$HOME/.zshrc"; then
+      sed -i "s/^plugins=(.*)/plugins=(${PLUGINS})/" "$HOME/.zshrc"
+    else
+      echo "plugins=(${PLUGINS})" >> "$HOME/.zshrc"
+    fi
+  fi
+}
+
+function _configure_theme () {
+  _print_header "Configuring Oh My Zsh theme"
+  if [ -f "$HOME/.zshrc" ]; then
+    if grep -qE '^ZSH_THEME=' "$HOME/.zshrc"; then
+      sed -i "s/^ZSH_THEME=\".*\"/ZSH_THEME=\"${THEME}\"/" "$HOME/.zshrc"
+    else
+      echo "ZSH_THEME=\"${THEME}\"" >> "$HOME/.zshrc"
+    fi
+  fi
+}
+
+function _done_message () {
+  cat <<EOF
+
+###########################################
+ Installation finished.
+ Please reboot (or open a new login shell)
+ for the default shell change to take effect.
+###########################################
+
+EOF
+}
+
+function main () {
+  _install_prerequisites
+  _set_default_shell
+  _install_oh_my_zsh
+  _configure_plugins
+  _configure_theme
+  _done_message
+}
+
+main "$@"
