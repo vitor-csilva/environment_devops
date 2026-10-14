@@ -327,6 +327,8 @@ function _install_anydesk () {
     sudo apt update
     sudo apt install anydesk -y
 
+    _disable_anydesk_autostart
+
     local CONFIG_FILE="/etc/gdm3/custom.conf"
     local BACKUP_FILE="/etc/gdm3/custom.conf.bak"
 
@@ -340,11 +342,48 @@ function _install_anydesk () {
           -e "s|#  AutomaticLogin =.*|AutomaticLogin = ${USER}|" \
           "$CONFIG_FILE"
 
-      echo -e "\nGDM for Anydesk configuration updated successfully!"
+      echo -e "\nGDM for AnyDesk configuration updated successfully!"
     else
       echo "File $CONFIG_FILE not found. Skipping GDM adjustment."
     fi
   fi
+}
+
+function _disable_anydesk_autostart () {
+  _print_header "Disabling AnyDesk autostart"
+
+  # Stop and disable the systemd service (main autostart path)
+  if systemctl list-unit-files anydesk.service >/dev/null 2>&1; then
+    sudo systemctl disable --now anydesk.service 2>/dev/null || true
+    echo "Disabled systemd unit: anydesk.service"
+  fi
+
+  # Hide XDG autostart entries (system and user)
+  local desktop_file
+  for desktop_file in \
+    /etc/xdg/autostart/anydesk*.desktop \
+    "$HOME"/.config/autostart/anydesk*.desktop
+  do
+    [ -f "$desktop_file" ] || continue
+    if [[ "$desktop_file" == /etc/* ]]; then
+      if ! grep -q '^Hidden=true' "$desktop_file"; then
+        echo "Hidden=true" | sudo tee -a "$desktop_file" >/dev/null
+      fi
+    else
+      if ! grep -q '^Hidden=true' "$desktop_file"; then
+        echo "Hidden=true" >> "$desktop_file"
+      fi
+    fi
+    echo "Disabled autostart desktop entry: $desktop_file"
+  done
+
+  # Remove AnyDesk's own autostart config if present
+  if [ -f "$HOME/.anydesk/autostart.conf" ]; then
+    rm -f "$HOME/.anydesk/autostart.conf"
+    echo "Removed $HOME/.anydesk/autostart.conf"
+  fi
+
+  echo "AnyDesk will no longer start automatically with the OS."
 }
 
 function _install_terraform () {
