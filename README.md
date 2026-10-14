@@ -1,46 +1,121 @@
-# Zsh: A Powerful UNIX Shell
+# Environment DevOps
 
-Zsh is a UNIX command interpreter that serves as both an interactive login shell and a command interpreter for shell scripting. Its flexibility and extensive features make it a popular choice for developers.
+A Bash script that sets up a Linux (Ubuntu) environment with everyday DevOps tools — in a single command.
 
-## Oh My Zsh: The Ultimate Zsh Framework
+```bash
+git clone https://github.com/vitor-csilva/environment_devops.git
+cd environment_devops
+./devops_tools.sh
+```
 
-Oh My Zsh is an open-source, community-driven framework for managing Zsh configurations. It enhances your command-line experience with hundreds of plugins and stunning themes. For more details, visit the [official site](https://ohmyz.sh/).
-
----
-
-# `devops_tools.sh`
-
-This script simplifies the installation of Zsh and Oh My Zsh on Ubuntu with a single command. It also sets up additional tools and plugins to enhance your development environment.
-
-## Features
-
-### Applications Installed
-- **Zsh**: A powerful UNIX shell with customizable themes and plugins.
-- **VS Code**: A popular code editor for developers with extensive plugin support.
-- **Docker**: For containerization and orchestration, enabling you to build and run applications in isolated environments.
-- **Ansible**: A tool for IT automation, configuration management, and orchestration.
-- **Tilix**: A feature-rich terminal emulator with support for tiling and session management.
-- **Sublime Text**: A lightweight and fast text editor ideal for coding and editing plain text.
-- **Yq**: A command-line YAML processor for querying and manipulating YAML files.
-- **Jq**: A lightweight and flexible command-line JSON processor.
-- **Flameshot**: A powerful screenshot tool with annotation features for capturing and editing screenshots easily.
-- **Anydesk**: is a fast and secure remote desktop application that allows users to access and control computers from anywhere. It is lightweight, with low latency and high-performance remote access, making it ideal for IT support, remote work, and collaboration.
-- **Terraform**: Terraform is an infrastructure as code tool that lets you build, change, and version infrastructure safely and efficiently. This includes low-level components like compute instances, storage, and networking; and high-level components like DNS entries and SaaS features.
-
-### Oh My Zsh Plugins
-- **git**: Enhances Git functionality in Zsh.
-- **autosuggestion**: Suggests commands based on history.
-- **kubectl**: Simplifies Kubernetes command-line management.
-- **zsh-syntax-highlighting**: Highlights commands for better readability.
+> **Requirement:** Ubuntu (or a derivative) with `sudo`. Reboot after installation.
 
 ---
 
-## How to Use
+## What gets installed
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/vitor-csilva/environment_devops.git
+| Category | Tools |
+|----------|-------|
+| **Shell** | Zsh + Oh My Zsh (plugins: git, autosuggestions, kubectl, syntax-highlighting) |
+| **Containers** | Docker |
+| **Kubernetes** | kubectl, Krew (`neat`, `get-all`), Kind, Helm 4 |
+| **IaC / Automation** | Terraform, Ansible |
+| **Editors** | VS Code, Sublime Text |
+| **CLI utils** | yq, jq |
+| **Desktop** | Tilix, Flameshot, AnyDesk, Ferdium (Teams and other chat apps) |
 
-2. Execute the following command:
+---
+
+## About Zsh & Oh My Zsh
+
+### Zsh
+
+Zsh is a UNIX command interpreter that works both as an interactive login shell and as a scripting language. Its flexibility and rich feature set make it a popular choice among developers.
+
+### Oh My Zsh
+
+[Oh My Zsh](https://ohmyz.sh/) is an open-source, community-driven framework for managing Zsh configuration. It improves the command-line experience with hundreds of plugins and themes.
+
+This project installs Oh My Zsh with the following plugins:
+
+| Plugin | Purpose |
+|--------|---------|
+| **git** | Extra Git helpers and aliases |
+| **zsh-autosuggestions** | Suggests commands based on history |
+| **kubectl** | Kubernetes command-line helpers |
+| **zsh-syntax-highlighting** | Highlights commands as you type |
+
+The default theme is set to `xiong-chiamiov-plus`.
+
+---
+
+## Usage
+
+### Full install
+
+```bash
+./devops_tools.sh
+```
+
+### Skip specific tools
+
+```bash
+./devops_tools.sh --no-anydesk --no-ferdium
+```
+
+### Show all options
+
+```bash
+./devops_tools.sh --help
+```
+
+| Flag | Effect |
+|------|--------|
+| `--no-zsh` | Skip Zsh / Oh My Zsh |
+| `--no-docker` | Skip Docker |
+| `--no-kubectl` | Skip kubectl |
+| `--no-krew` | Skip Krew and plugins |
+| `--no-kind` | Skip Kind |
+| `--no-helm` | Skip Helm 4 |
+| `--no-ferdium` | Skip Ferdium |
+| `--no-vscode` | Skip VS Code |
+| `--no-tilix` | Skip Tilix |
+| `--no-sublime` | Skip Sublime |
+| `--no-yq` / `--no-jq` | Skip yq / jq |
+| `--no-ansible` | Skip Ansible |
+| `--no-terraform` | Skip Terraform |
+| `--no-flameshot` | Skip Flameshot |
+| `--no-anydesk` | Skip AnyDesk |
+
+---
+
+## Project structure
+
+```text
+environment_devops/
+├── devops_tools.sh          # Main entrypoint (flags + orchestration)
+├── libs/
+│   └── functions_main.sh    # Install functions
+└── anotacoes/               # Notes and improvements
+```
+
+---
+
+## After installation
+
+1. **Reboot** the system (default shell, Docker group, etc.).
+2. **Docker:** if you have not rebooted yet, run `newgrp docker`.
+3. **Kind:** `kind create cluster` (requires Docker running).
+4. **Krew:** useful examples:
    ```bash
-   ./devops_tools.sh
+   kubectl neat get -- pod <name> -oyaml
+   kubectl get-all
+   ```
+5. **Flameshot:** add a custom shortcut under *Settings → Keyboard → Custom Shortcuts*:
+   - Command: `/bin/sh -c "flameshot gui > /dev/null &"`
+
+---
+
+## Author
+
+Vitor Costa
