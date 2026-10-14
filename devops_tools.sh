@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-# devops_tools.sh - Ferramenta desenvolvida para instalações de ferramentas DevOps utilizadas no dia a dia.
+# devops_tools.sh - Tool to install everyday DevOps utilities on a fresh Linux environment.
 #
-# Autor: Vitor Costa
+# Author: Vitor Costa
 #
 # ------------------------------------------------------------------------ #
-# Descrição:
-#   Instala e configura um conjunto de ferramentas DevOps em ambientes Linux
-#   (Ubuntu), com flags para pular itens específicos.
+# Description:
+#   Installs and configures a set of DevOps tools on Linux (Ubuntu),
+#   with flags to skip specific items.
 #
-# Exemplos:
+# Examples:
 #   ./devops_tools.sh
 #   ./devops_tools.sh --no-anydesk --no-ferdium
 #   ./devops_tools.sh --help
@@ -19,7 +19,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=libs/functions_main.sh
 source "${SCRIPT_DIR}/libs/functions_main.sh"
 
-# ------------------------------- VARIÁVEIS ----------------------------------------- #
+# ------------------------------- VARIABLES ----------------------------------------- #
 VAR_SHELL="${SHELL##*/}"
 ENABLE_ZSH=1
 ENABLE_CODE=1
@@ -39,13 +39,13 @@ ENABLE_ANYDESK=1
 ENABLE_TERRAFORM=1
 
 function trapped () {
-  echo "Erro na linha $1."
+  echo "Error on line $1."
   exit 1
 }
 
 trap 'trapped $LINENO' ERR
 
-# ------------------------------- EXECUÇÃO ----------------------------------------- #
+# ------------------------------- EXECUTION ----------------------------------------- #
 
 while [ -n "$1" ]; do
     case "$1" in

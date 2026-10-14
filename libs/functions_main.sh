@@ -63,7 +63,7 @@ function _install_sed () {
 
 function _install_git () {
   if ! command -v git >/dev/null 2>&1; then
-    _print_header "Iniciando instalação do Git"
+    _print_header "Starting Git installation"
     case "$(_get_distro)" in
       ubuntu) sudo apt install git -y ;;
       fedora) sudo yum install git -y ;;
@@ -72,7 +72,7 @@ function _install_git () {
 }
 
 function _install_prerequisites () {
-  _print_header "Instalando pré-requisitos"
+  _print_header "Installing prerequisites"
   case "$(_get_distro)" in
     ubuntu) sudo apt-get update -y ;;
   esac
@@ -85,9 +85,9 @@ function _install_prerequisites () {
 
 function _install_docker () {
   if [ "$ENABLE_DOCKER" -eq 1 ]; then
-    _print_header "Iniciando instalação do Docker"
+    _print_header "Starting Docker installation"
     _install_curl
-    # Script oficial remoto: https://get.docker.com
+    # Official remote install script: https://get.docker.com
     curl -fsSL https://get.docker.com | sudo sh
     sudo systemctl enable docker
     sudo systemctl start docker.socket
@@ -97,7 +97,7 @@ function _install_docker () {
 }
 
 function _install_Oh_My_Zsh () {
-  _print_header "Iniciando instalação do Oh My Zsh..."
+  _print_header "Starting Oh My Zsh installation..."
   wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -P /tmp
   sed -i 's/exec zsh -l/#exec zsh -l/g' /tmp/install.sh
   y | sh /tmp/install.sh
@@ -120,7 +120,7 @@ function _configure_theme_zsh () {
 
 function _install_kubectl () {
   if [ "$ENABLE_KUBECTL" -eq 1 ]; then
-    _print_header "Iniciando instalação do Kubectl..."
+    _print_header "Starting Kubectl installation..."
     local arch
     arch="$(_get_arch)"
     _install_curl
@@ -133,12 +133,12 @@ function _install_kubectl () {
 function _install_krew () {
   if [ "$ENABLE_KREW" -eq 1 ]; then
     if ! command -v kubectl >/dev/null 2>&1; then
-      echo "kubectl não encontrado. Instalando kubectl antes do krew..."
+      echo "kubectl not found. Installing kubectl before krew..."
       ENABLE_KUBECTL=1
       _install_kubectl
     fi
 
-    _print_header "Iniciando instalação do Krew (plugins: neat, get-all)..."
+    _print_header "Starting Krew installation (plugins: neat, get-all)..."
     (
       cd "$(mktemp -d)" &&
       OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
@@ -166,7 +166,7 @@ function _install_krew () {
 
 function _install_kind () {
   if [ "$ENABLE_KIND" -eq 1 ]; then
-    _print_header "Iniciando instalação do Kind..."
+    _print_header "Starting Kind installation..."
     local arch kind_version
     arch="$(_get_arch)"
     _install_curl
@@ -180,14 +180,14 @@ function _install_kind () {
 
 function _install_helm () {
   if [ "$ENABLE_HELM" -eq 1 ]; then
-    _print_header "Iniciando instalação do Helm 4..."
+    _print_header "Starting Helm 4 installation..."
     local arch helm_version tmp_dir
     arch="$(_get_arch)"
     _install_curl
-    # Garante Helm 4.x (não a linha 3.x)
+    # Ensure Helm 4.x (not the 3.x line)
     helm_version="$(curl -fsSL https://api.github.com/repos/helm/helm/releases | grep -oP '"tag_name":\s*"\Kv4\.[^"]+' | head -1)"
     if [ -z "$helm_version" ]; then
-      echo "Não foi possível obter a versão do Helm 4."
+      echo "Could not resolve Helm 4 version."
       return 1
     fi
     tmp_dir="$(mktemp -d)"
@@ -202,14 +202,14 @@ function _install_helm () {
 
 function _install_ferdium () {
   if [ "$ENABLE_FERDIUM" -eq 1 ]; then
-    _print_header "Iniciando instalação do Ferdium..."
+    _print_header "Starting Ferdium installation..."
     local arch ferdium_tag ferdium_version deb_arch deb_file
     arch="$(_get_arch)"
     case "$arch" in
       amd64) deb_arch="amd64" ;;
       arm64) deb_arch="arm64" ;;
       *)
-        echo "Arquitetura $arch não suportada para o Ferdium (.deb)."
+        echo "Architecture $arch is not supported for Ferdium (.deb)."
         return 1
         ;;
     esac
@@ -236,7 +236,7 @@ function _install_zsh-syntax-highlighting () {
 
 function _install_tilix () {
   if [ "$ENABLE_TILIX" -eq 1 ]; then
-    _print_header "Iniciando instalação do Tilix..."
+    _print_header "Starting Tilix installation..."
     sudo apt install tilix -y
     tilix --version
     sudo update-alternatives --config x-terminal-emulator
@@ -245,7 +245,7 @@ function _install_tilix () {
 
 function _install_zsh () {
   if [ "$ENABLE_ZSH" -eq 1 ]; then
-    _print_header "Iniciando instalação do ZSH"
+    _print_header "Starting Zsh installation"
     sudo apt install zsh -y
     chsh -s /bin/zsh
     _install_wget
@@ -257,7 +257,7 @@ function _install_zsh () {
 
 function _install_vscode () {
   if [ "$ENABLE_CODE" -eq 1 ]; then
-    _print_header "Iniciando instalação do Visual Studio Code..."
+    _print_header "Starting Visual Studio Code installation..."
     _install_wget
     _install_gpg
     wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg && \
@@ -272,7 +272,7 @@ function _install_vscode () {
 
 function _install_sublime () {
   if [ "$ENABLE_SUBLIME" -eq 1 ]; then
-    _print_header "Iniciando instalação do Sublime Text..."
+    _print_header "Starting Sublime Text installation..."
     wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/sublimehq-archive.gpg > /dev/null
     echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
     sudo apt-get update
@@ -282,7 +282,7 @@ function _install_sublime () {
 
 function _install_yq () {
   if [ "$ENABLE_YQ" -eq 1 ]; then
-    _print_header "Iniciando instalação do yq..."
+    _print_header "Starting yq installation..."
     local arch
     arch="$(_get_arch)"
     sudo wget "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${arch}" -O /usr/local/bin/yq && \
@@ -292,14 +292,14 @@ function _install_yq () {
 
 function _install_jq () {
   if [ "$ENABLE_JQ" -eq 1 ]; then
-    _print_header "Iniciando instalação do jq..."
+    _print_header "Starting jq installation..."
     sudo apt-get install jq -y
   fi
 }
 
 function _install_ansible () {
   if [ "$ENABLE_ANSIBLE" -eq 1 ]; then
-    _print_header "Iniciando instalação do Ansible..."
+    _print_header "Starting Ansible installation..."
     sudo DEBIAN_FRONTEND=noninteractive apt-add-repository --yes ppa:ansible/ansible
     sudo apt update
     sudo apt install ansible -y
@@ -308,14 +308,14 @@ function _install_ansible () {
 
 function _install_flameshot () {
   if [ "$ENABLE_FLAMESHOT" -eq 1 ]; then
-    _print_header "Iniciando instalação do Flameshot..."
+    _print_header "Starting Flameshot installation..."
     sudo apt install flameshot -y
   fi
 }
 
 function _install_anydesk () {
   if [ "$ENABLE_ANYDESK" -eq 1 ]; then
-    _print_header "Iniciando instalação do Anydesk..."
+    _print_header "Starting AnyDesk installation..."
     sudo apt update
     sudo apt install ca-certificates curl -y
     sudo install -m 0755 -d /etc/apt/keyrings
@@ -342,14 +342,14 @@ function _install_anydesk () {
 
       echo -e "\nGDM for Anydesk configuration updated successfully!"
     else
-      echo "Arquivo $CONFIG_FILE não encontrado. Pulando ajuste do GDM."
+      echo "File $CONFIG_FILE not found. Skipping GDM adjustment."
     fi
   fi
 }
 
 function _install_terraform () {
   if [ "$ENABLE_TERRAFORM" -eq 1 ]; then
-    _print_header "Iniciando instalação do Terraform..."
+    _print_header "Starting Terraform installation..."
     wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
     sudo apt update && sudo apt install terraform -y
@@ -401,31 +401,31 @@ EOF
 
 function _help () {
     echo "
-$ ./devops_tools.sh [parâmetros]
+$ ./devops_tools.sh [options]
 
-Parâmetros aceitos:
-  --no-zsh        - Não fará a instalação do zsh.
-  --no-vscode     - Não fará a instalação do Visual Studio Code.
-  --no-docker     - Não fará a instalação do docker.
-  --no-kubectl    - Não fará a instalação do kubectl.
-  --no-krew       - Não fará a instalação do krew e plugins (neat, get-all).
-  --no-kind       - Não fará a instalação do Kind.
-  --no-helm       - Não fará a instalação do Helm 4.
-  --no-ferdium    - Não fará a instalação do Ferdium.
-  --no-tilix      - Não fará a instalação do Tilix.
-  --no-sublime    - Não fará a instalação do Sublime.
-  --no-yq         - Não fará a instalação do yq.
-  --no-jq         - Não fará a instalação do jq.
-  --no-ansible    - Não fará a instalação do Ansible.
-  --no-flameshot  - Não fará a instalação do Flameshot.
-  --no-anydesk    - Não fará a instalação do Anydesk.
-  --no-terraform  - Não fará a instalação do terraform.
-  -h | --help     - Menu de ajuda.
+Accepted options:
+  --no-zsh        - Skip Zsh installation.
+  --no-vscode     - Skip Visual Studio Code installation.
+  --no-docker     - Skip Docker installation.
+  --no-kubectl    - Skip kubectl installation.
+  --no-krew       - Skip Krew and plugins (neat, get-all).
+  --no-kind       - Skip Kind installation.
+  --no-helm       - Skip Helm 4 installation.
+  --no-ferdium    - Skip Ferdium installation.
+  --no-tilix      - Skip Tilix installation.
+  --no-sublime    - Skip Sublime installation.
+  --no-yq         - Skip yq installation.
+  --no-jq         - Skip jq installation.
+  --no-ansible    - Skip Ansible installation.
+  --no-flameshot  - Skip Flameshot installation.
+  --no-anydesk    - Skip AnyDesk installation.
+  --no-terraform  - Skip Terraform installation.
+  -h | --help     - Show this help menu.
     "
 }
 
 function _error () {
-    echo "O parâmetro $1 não existe."
+    echo "Option $1 does not exist."
     _help
     exit 1
 }
